@@ -19,3 +19,11 @@ From main I called `int product()`, which contained a double for-loop where `i =
 Glossing over some details, `createList` called `void isPalindrome(int* arr, int arrSize)`, which used another nested for-loop to determine whether the number was a palindrome.<br><br>
 This did not work, but there's probably some bugs I haven't worked out yet. Though, I will probably revamp the whole solution, as I didn't spend as much time sitting and thinking about the problem as I would've liked. <br>
 For now, it's lunchtime, and I have other school work to attend to.
+
+## Update 2:
+
+---
+So, I solved the problem. It's been a while, and I hadn't really thought of the problem at all, really, but I was getting ready to send a funny video to one of my friends (which talked about the anxieties of the technical question interview world) when I realized the contents of the video was *also* about a palindrome. <br>
+In the video ([here](https://utexas.instructure.com/courses/1331170/files/folder/Quizzes_Exercises/Exercise%204%20Coverage?)), the interviewee used the stack to determine whether a string was palindromic. So, I thought I might employ the same strategy. As I began working out the bugs, I realized: "Oh, this doesn't quite work as well with numbers as it would strings." I ended up having to reverse the number and create linked lists of that reversed number, and blah blah blah.
+<br>
+Honestly, though, I'm not mad about it. It's about time I tackled linked lists and recursion for a project like this. This time, I won't cover the details of my solution. Wouldn't you know it, I'm hungry again and I've spent too much time on this problem. The code, however, will be included, like normal. (And it's commented).  

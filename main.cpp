@@ -1,56 +1,92 @@
 #include <iostream>
+#include <cstddef>
 
-void isPalindrome (int* arr, int arrSize) {
-    for (int i = 0; i < (arrSize/2); i++) {
-        for (int j = (arrSize - 1); j > (arrSize/2); j--) {
-            if (*(arr + i) != *(arr + j)) {
-                *(arr + 0) = 0;
-                return;
-            }
+//struct for linked list
+struct Node {
+    int value;
+    struct Node *next;
+};
+
+int reverseNumber(int product) {
+    int magnitude = 1, temp = product, answer = 0;
+    while (product != 0) {
+        magnitude *= 10; //increase magnitude by 10 for size of number
+        product /= 10;
+    }
+    magnitude /= 10; //account for extra magnitude
+
+    product = temp;
+    while (product != 0) {
+        answer += ((product % 10) * magnitude); //answer will be reversed number
+        product /= 10;
+        magnitude /= 10;
+    }
+    return answer;
+}
+
+Node* createLinkedList(int product) {
+    if ((product / 10) != 0) {
+        product /= 10;
+
+        Node* next;
+        next = (Node*)malloc(sizeof(struct Node));
+
+        next->value = product % 10;
+        next->next = createLinkedList(product); //recursively create list, given reversed number
+
+        return next;
+    }
+    else
+        return nullptr;
+}
+
+int isPalindrome(Node* head, int product) {
+    //check if number is palindrome
+    while (head->next != nullptr) {
+        if ((product % 10) != head->value)
+            return -1;
+        else {
+            product /= 10;
+            head = head->next;
         }
     }
-    *(arr + 0) = 1;
+    return 1;
 }
 
-int createList(int prod) {
-    int temp = prod;
-    int count = 0;
-    while (prod != 0) {
-        prod /= 10;
-        count++;
+void freeList(Node* head) {
+    //recursively free list
+    if (head->next == nullptr) {
+        free(head);
+        return;
     }
-    if ((count % 2) == 0)
-        return 0;
-
-    int* convert = (int*)malloc(sizeof(int) * count);
-    count = 0;
-    prod = temp;
-
-    while (prod != 0) {
-        *(convert + count) = prod % 10;
-        count++;
-        prod /= 10;
-    }
-
-    isPalindrome(convert, count);
-    if (*(convert + 0) == 1)
-        return 1;
-    free(convert);
-    return 0;
+    else
+        freeList(head->next);
 }
 
-int product() {
+int findProduct() {
+    int highest = 0; //current highest palindrome
     for (int i = 999; i >= 100; i--) {
-        for (int j = i - 1; j >= 100; j--) {
-            int res = createList(i * j);
-            if (res == 1) {
-                return (i * j);
-            }
+        for (int j = 999; j >= 100; j--) {
+            int reversed = reverseNumber(i*j); //reverse the product
+
+            Node *head;
+            head = (Node*)malloc(sizeof(struct Node)); //create new head of linked list
+
+            head->value = (reversed) % 10;
+            head->next = createLinkedList(reversed); //create rest of the list
+
+            int result = isPalindrome(head, i * j); //check if number is palindrome
+            if (result == 1 && (i * j) > highest)
+                highest = i * j; //set highest palindrome
+
+            freeList(head); //free allocated memory
         }
     }
-    return 0;
+    return highest;
 }
+
 int main() {
-    std::cout << product() << std::endl;
+    std::cout << findProduct() << std::endl;
+
     return 0;
 }
